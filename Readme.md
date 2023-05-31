@@ -15,7 +15,8 @@ pip install -r requirements.txt
 
 ## You must modify the langchain db file to handle the db connectivity error
 
-try:
+It is somewhere in line number 228
+try: 
     cursor = connection.execute(text(command))
 except Exception as e:
     return "Invalid query to execute"
