@@ -11,6 +11,8 @@ python -m venv venv
 
 pip install -r requirements.txt
 
+3. Important secret will be in .env file
+
 ## You must modify the langchain db file to handle the db connectivity error
 
 try:
