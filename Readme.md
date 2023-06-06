@@ -1,5 +1,5 @@
 # A Mortgage assistant which helps to find the best mortgage deal from the database. It can also answer general questions.
-
+ 
 ## Installation on localhost:
 
 1. Create a new environment using the following command:
