@@ -7,7 +7,7 @@
 6. What is the cheapest mortgage for a first time buyer? (lowest initial rate)
 7. I want to buy a house and rent it out, what is the smallest deposit I can put down? (Highest LTV on a Buy-to-let mortgage)
 8. Looking at the mortgages with a product fee. Is it better to pay a percentage of the loan, or a fixed fee?
-
+    
 ## Please find below some example prompts:
 These include more general questions, not just from the data, can ChatGPT access this from the internet?
 
