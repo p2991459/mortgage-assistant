@@ -3,3 +3,5 @@ csv_data
 custom_chain
 experiments
 .env
+openai_playground
+langchain_playground

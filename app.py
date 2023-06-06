@@ -2,7 +2,7 @@ import time
 from flask import Flask, request, jsonify, render_template
 import json
 import os
-from sql_agent import db_chain
+from sql_agent import mrkl
 app = Flask(__name__)
 from prompt_similarity import get_best_match
 from openai_playground import general_query
@@ -33,15 +33,15 @@ def gpt_response():
             print(f"This is the best match from the prompt cache: {best_match}")
             if best_match is not None:
                 time.sleep(3)
-                return str(cache_prompts[best_match])
+                return str(default_prompt_cache[best_match])
             else:
                 # TODO: It is the temp method to store the cache, it reduce the bot efficiency.
                 # output_from_normal_chain = gpt.submit_request(user_input)['choices'][0]['text']
                 # print(f"This is output from normal chain:  {output_from_normal_chain}")
                 # if output_from_normal_chain == "RESULTS FROM DB":
-                db_chain_output = str(db_chain.run(user_input))
+                db_chain_output = str(mrkl.run(user_input))
                 print(f"This is the output from db_chain: {db_chain_output}")
-                if (db_chain_output == "Syntax error") or (db_chain_output == "Got empty result") or (db_chain_output == "It is general question.") or (db_chain_output == "It is general question"):
+                if (db_chain_output == "Syntax error")  or (db_chain_output == "It is general question.") or (db_chain_output == "It is general question") or (db_chain_output == "It is a general question. Please provide more details."):
                     try:
                         history_chat = json.loads(open("last_conversation.json").read())
                         print(f"This is history chat: {history_chat}")
@@ -56,17 +56,25 @@ def gpt_response():
                         print(prompt)
                         return general_query(prompt)
                     except FileNotFoundError as e:
-                        pass
-                cache_prompts[user_input] = db_chain_output
-                open("cache_prompts.json", "w").write(json.dumps(cache_prompts))
-                return db_chain_output
+                        print("File not found so executing except block")
+                        output = general_query(user_input)
+                        cache_prompts[user_input] = output
+                        open("cache_prompts.json", "w").write(json.dumps(cache_prompts))
+                        return output
+                elif((db_chain_output == "Got empty result")):
+                    output = "There is no data that matches your requirements. We can put you in contact with a qualified and regulate mortgage advisor, who will guide you through the next steps to apply for the mortgage.Alternatively you can apply now for a mortgage, via the application form in this website.In both circumstances, we will discuss with you all the best options available to you."
+                    return output
+                else:
+                    cache_prompts[user_input] = db_chain_output
+                    open("cache_prompts.json", "w").write(json.dumps(cache_prompts))
+                    return db_chain_output
                 # else:
                 #     cache_prompts[user_input] = str(output_from_normal_chain)
                 #     open("cache_prompts.json", "w").write(json.dumps(cache_prompts))
                 #     return str(output_from_normal_chain)
 
         else:
-            final_output = str(db_chain.run(user_input))
+            final_output = str(mrkl.run(user_input))
             cache_prompts[user_input] = final_output
             open("cache_prompts.json", "w").write(json.dumps(cache_prompts))
             return final_output

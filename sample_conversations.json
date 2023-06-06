@@ -1,0 +1,70 @@
+[
+    {
+        "role": "system",
+        "content": "You are a mortgage chatbot that helps users find the best mortgage deals. Always check if the similar question ask by the user and provide the same answer as before. You always calculate the LTV if you have chance to calculate that."
+    },
+    {
+        "role": "user",
+        "content": "Hey! my name is pankaj"
+    },
+    {
+        "role": "assistant",
+        "content": "Hey pankaj"
+    },
+    {
+        "role": "user",
+        "content": "Can you show me the best options available?"
+    },
+    {
+        "role": "assistant",
+        "content": "Surely! Please provide more details about you so that I can find the best deal for you."
+    },
+    {
+        "role": "user",
+        "content": "I am a full-time worker with a salary of 20000/month and have a good credit history."
+    },
+    {
+        "role": "assistant",
+        "content": "Great! Here are some best options available for you: {{ Best options from the database using above details }}"
+    },
+    {
+        "role": "system",
+        "content": "Next conversation"
+    },
+    {
+        "role": "user",
+        "content": "Hii there! I want to buy a house in Spain"
+    },
+    {
+        "role": "assistant",
+        "content": "That's a great idea! You can apply for a mortgage if you don't have enough capital. I can help you find the best mortgage deal we have."
+    },
+    {
+        "role": "user",
+        "content": "Cool! I have 1 lac euros in my account and I need 2 lacs more."
+    },
+    {
+        "role": "assistant",
+        "content": "Does that mean the Loan to Value (LTV) needed is 50%? I can show you the best mortgage deal based on that."
+    },
+    {
+        "role": "user",
+        "content": "What is LTV?"
+    },
+    {
+        "role": "assistant",
+        "content": "LTV stands for Loan to Value and represents the ratio of the mortgage loan amount to the appraised value of the property."
+    },
+    {
+        "role": "user",
+        "content": "Ok, my property value is 3 lacs and I just have 1 lac, so can you provide the best options?"
+    },
+    {
+        "role": "assistant",
+        "content": "Sure! So based on your requirements, the LTV is 75%. I will find the best available mortgage options for you."
+    },
+    {
+        "role": "user",
+        "content": "Ok, my property value is 3 lacs and I just have 1 lac, so can you provide the best options?"
+    }
+]

@@ -1,10 +1,20 @@
 import os
-
+from langchain.agents import Tool
+from langchain.agents import AgentType
+from langchain.memory import ConversationBufferMemory
+from langchain import OpenAI,LLMMathChain
+from langchain.utilities import SerpAPIWrapper
+from langchain.agents import initialize_agent
 from langchain.prompts.prompt import PromptTemplate
-from langchain import OpenAI, SQLDatabase, SQLDatabaseChain
+from langchain import OpenAI, SQLDatabase, SQLDatabaseChain,LLMMathChain
 from dotenv import load_dotenv
 load_dotenv()
-_DEFAULT_TEMPLATE = """Given an input question, first create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.  If you find SQL syntax is incorrect than reply "Sytax error"
+_DEFAULT_TEMPLATE = """You are an expert mortgage assistant which help to find best mortgage deals for the users from the database.the Given an input question, first create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.  If you find SQL syntax is incorrect than reply "Sytax error".
+```Before Running the query you should always do the following things
+You have given two tables from the database
+1. first_time_buyer_Mortgage
+
+2. overseas mortgages```
 Use the following format:
 
 Question: "Question here"
@@ -36,10 +46,32 @@ PROMPT = PromptTemplate(
 DB_USER = os.getenv("DATABASE_USER")
 DB_PASS = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST_NAME")
+
+
 db = SQLDatabase.from_uri(f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}/mortgage_db")
 
 llm = OpenAI(temperature=0, verbose=True,model_name="gpt-3.5-turbo")
+search = SerpAPIWrapper()
+llm_math_chain = LLMMathChain(llm=llm, verbose=True)
 db_chain = SQLDatabaseChain.from_llm(llm, db, prompt=PROMPT, verbose=True)
+tools = [
+    Tool(
+        name="Calculator",
+        func=llm_math_chain.run,
+        description="useful for when you need to answer questions about math"
+    ),
 
-# print(db_chain.run("What is cricket match"))
+    Tool(
+        name="DB TOOL",
+        func=db_chain.run,
+        description="useful for when you need to answer questions from table name is 'testdb1'.Input should be in the form of a question containing full context"
+    ),
+    Tool(
+        name = "Search",
+        func=search.run,
+        description="useful for when you need to answer questions about current events. You should ask targeted questions"
+    ),
+]
+mrkl = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+
 
